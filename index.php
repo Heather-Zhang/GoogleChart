@@ -19,8 +19,10 @@
       var options = {
           showLegend: true,
           showZoomOut: true,
-          region: "world"
-//          zoomOutLabel: "click to zoom in"
+          region: 'world',
+          width: '900px',
+          height: '500px',
+          zoomOutLabel: 'back to world'
       };
       options['dataMode'] = 'regions';
 

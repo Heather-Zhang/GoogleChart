@@ -1,35 +1,47 @@
 <html>
-  <head>
-    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-     google.load('visualization', '1', {'packages': ['geochart']});
-     google.setOnLoadCallback(drawRegionsMap);
+<head>
+  <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+  <script type='text/javascript'>
+   google.load('visualization', '1', {'packages': ['geomap']});
+   google.setOnLoadCallback(drawMap);
 
-      function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
-          ['Country', 'Popularity'],
-          ['Germany', 200],
-          ['United States', 300],
-          ['Brazil', 400],
-          ['Canada', 500],
-          ['France', 600],
-          ['RU', 700]
-        ]);
+    function drawMap() {
+      var data = google.visualization.arrayToDataTable([
+        ['Country', 'srValue'],
+        ['Germany', 200],
+        ['United States', 300],
+        ['Brazil', 400],
+        ['Canada', 500],
+        ['France', 600],
+        ['RU', 700]
+      ]);
 
-        var options = {
-            sizeAxis: { minValue: 0, maxValue: 100 },
-            //region: '155', // Western Europe
-            //displayMode: 'markers',
-            colorAxis: {colors: ['#e7711c', '#4374e0']}, // orange to blue
-            magnifyingGlass: {enable:true, zoomFactor:5.0}
-        };
+      var options = {
+          showLegend: true,
+          showZoomOut: true,
+          region: "world"
+//          zoomOutLabel: "click to zoom in"
+      };
+      options['dataMode'] = 'regions';
 
-        var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+      var container = document.getElementById('map_canvas');
+      var geomap = new google.visualization.GeoMap(container);
+      geomap.draw(data, options);
+      google.visualization.events.addListener(
+        geomap, 'regionClick', function(e) {
+        options['region'] = e['region'];
+        geomap.draw(data, options);
+      }); 
+      
+      google.visualization.events.addListener(
+        geomap, 'zoomOut', function(e) {
+        options['region'] = "world";
+        geomap.draw(data, options);
+      }); 
     };
-    </script>
-  </head>
-  <body>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
-  </body>
-</html>
+  </script>
+</head>
+
+<body>
+  <div id='map_canvas' style="width: 900px; height: 500px;"></div>
+</body>
